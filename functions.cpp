@@ -1,275 +1,163 @@
 #include "functions.h"
-
-#include <algorithm>
-#include <cmath>
 #include <iostream>
-#include <limits>
 #include <string>
+#include <cmath>
+#include <algorithm>
+#include <vector>
 
-using std::cin;
-using std::cout;
-using std::endl;
-using std::numeric_limits;
-using std::streamsize;
-using std::string;
-using std::to_string;
-
-void SetUtf8Console() {
-#ifdef _WIN32
-  system("chcp 65001 > nul");
-#endif
-}
-
-// 1. Вычисляет дробную часть числа.
+// Задание 1.1: Дробная часть. Возвращает только вещественную часть числа.
 double Fraction(double x) {
-  return x - static_cast<int>(x);
+  return x - static_cast<long>(x);
 }
 
-// 2. Преобразует символ цифры в её ASCII код.
+// Задание 1.3: Символ в число. Преобразует символ цифры в int через ASCII.
 int CharToNum(char x) {
-  return static_cast<int>(x);
+  if (x >= '0' && x <= '9') return x - '0';
+  return -1;
 }
 
-// 3. Проверяет, является ли число двузначным (по модулю).
+// Задание 1.5: Двузначное. Проверка, входит ли число в диапазон [10, 99].
 bool IsTwoDigits(int x) {
-  int abs_x = (x < 0) ? -x : x;
+  int abs_x = std::abs(x);
   return (abs_x >= 10 && abs_x <= 99);
 }
 
-// 4. Проверяет, находится ли число в заданном диапазоне (включительно).
+// Задание 1.7: Диапазон. Проверяет нахождение n между границами a и b.
 bool IsInRange(int a, int b, int num) {
-  return (a <= num && num <= b) || (b <= num && num <= a);
+  return (num >= std::min(a, b) && num <= std::max(a, b));
 }
 
-// 5. Проверяет, равны ли три числа между собой.
+// Задание 1.9: Равенство. Возвращает true, если все три аргумента равны.
 bool AreEqual(int a, int b, int c) {
   return (a == b && b == c);
 }
 
-// 6. Вычисляет модуль целого числа.
+// Задание 2.1: Модуль. Возвращает абсолютную величину целого числа.
 int MyAbs(int x) {
-  return (x > 0) ? x : -x;
+  return (x < 0) ? -x : x;
 }
 
-// 7. Проверяет, делится ли число на 3 или 5, но не на 15.
-bool IsDivisibleBy3Or5ButNot15(int x) {
-  bool divisible_by_3 = (x % 3 == 0);
-  bool divisible_by_5 = (x % 5 == 0);
-  
-  return (divisible_by_3 || divisible_by_5) && !(divisible_by_3 && divisible_by_5);
+// Задание 2.3: Is35. Делится на 3 или 5, но не на оба (исключающее ИЛИ).
+bool Is35(int x) {
+  bool d3 = (x % 3 == 0);
+  bool d5 = (x % 5 == 0);
+  return (d3 || d5) && !(d3 && d5);
 }
 
-// 8. Возвращает максимальное из трёх целых чисел.
+// Задание 2.5: Максимум трех. Находит самое большое число из переданных.
 int MaxOfThree(int x, int y, int z) {
-  int max_value = x;
-  if (y > max_value) max_value = y;
-  if (z > max_value) max_value = z;
-  return max_value;
+  return std::max({x, y, z});
 }
 
-// 9. Вычисляет сумму с особым условием: возвращает 20, если сумма от 10 до 19.
+// Задание 2.7: Сумма 20. Возвращает 20, если сумма параметров в пределах [10, 19].
 int SpecialSum(int x, int y) {
-  int sum_xy = x + y;
-  return (sum_xy >= 10 && sum_xy <= 19) ? 20 : sum_xy;
+  int sum = x + y;
+  return (sum >= 10 && sum <= 19) ? 20 : sum;
 }
 
-// 10. Преобразует номер дня недели (1-7) в название дня на русском.
-string DayOfWeek(int x) {
+// Задание 2.9: День недели. Возвращает текстовое название дня по номеру 1-7.
+std::string DayOfWeek(int x) {
   switch (x) {
-    case 1:
-      return "понедельник";
-    case 2:
-      return "вторник";
-    case 3:
-      return "среда";
-    case 4:
-      return "четверг";
-    case 5:
-      return "пятница";
-    case 6:
-      return "суббота";
-    case 7:
-      return "воскресенье";
-    default:
-      return "это не день недели";
+    case 1: return "Понедельник";
+    case 2: return "Вторник";
+    case 3: return "Среда";
+    case 4: return "Четверг";
+    case 5: return "Пятница";
+    case 6: return "Суббота";
+    case 7: return "Воскресенье";
+    default: return "Ошибка: неверный номер дня";
   }
 }
 
-// 11. Возвращает строку с числами от 0 до x, разделёнными пробелами.
-string ListNumbers(int x) {
-  string result = "";
+// Задание 3.1: Список чисел. Генерирует строку с числами от 0 до x.
+std::string ListNumbers(int x) {
+  std::string res = "";
   for (int i = 0; i <= x; ++i) {
-    result += to_string(i);
-    if (i < x) result += " ";
+    res += std::to_string(i) + (i == x ? "" : " ");
   }
-  return result;
+  return res;
 }
 
-// 12. Возвращает строку с чётными числами от 0 до x, разделёнными пробелами.
-string EvenNumbers(int x) {
-  if (x < 0) return "";
-  string result = "";
-  bool first = true;
+// Задание 3.3: Четные числа. Выводит 0, 2, 4... используя шаг цикла +2.
+std::string EvenNumbers(int x) {
+  std::string res = "";
   for (int i = 0; i <= x; i += 2) {
-    if (!first) result += " ";
-    result += to_string(i);
-    first = false;
+    res += std::to_string(i) + " ";
   }
-  return result;
+  return res;
 }
 
-// 13. Считает количество цифр в длинном целом числе.
+// Задание 3.5: Кол-во цифр. Считает количество знаков в числе через деление.
 int DigitCount(long x) {
   if (x == 0) return 1;
-  if (x < 0) x = -x;
   int count = 0;
-  while (x > 0) {
-    ++count;
-    x /= 10;
+  long temp = std::abs(x);
+  while (temp > 0) {
+    temp /= 10;
+    count++;
   }
   return count;
 }
 
-// 14. Рисует квадрат из звёздочек со стороной x.
+// Задание 3.7: Квадрат. Рисует в консоли квадрат из звездочек размером x.
 void DrawSquare(int x) {
   for (int i = 0; i < x; ++i) {
-    for (int j = 0; j < x; ++j) {
-      cout << "*";
-    }
-    cout << endl;
+    for (int j = 0; j < x; ++j) std::cout << "*";
+    std::cout << "\n";
   }
 }
 
-// 15. Рисует прямоугольный треугольник из звёздочек высотой x.
+// Задание 3.9: Треугольник. Рисует правый прямоугольный треугольник высотой x.
 void DrawRightTriangle(int x) {
   for (int i = 1; i <= x; ++i) {
-    for (int j = 0; j < x - i; ++j) {
-      cout << " ";
-    }
-    for (int j = 0; j < i; ++j) {
-      cout << "*";
-    }
-    cout << endl;
+    for (int j = 0; j < x - i; ++j) std::cout << " ";
+    for (int k = 0; k < i; ++k) std::cout << "*";
+    std::cout << "\n";
   }
 }
 
-// 16. Находит первое вхождение значения x в массиве.
+// Задание 4.1: Поиск. Возвращает индекс первого найденного элемента x в массиве.
 int FindFirstElement(const int arr[], int size, int x) {
   for (int i = 0; i < size; ++i) {
-    if (arr[i] == x) {
-      return i;
-    }
+    if (arr[i] == x) return i;
   }
   return -1;
 }
 
-// 17. Находит элемент с максимальным модулем в массиве.
-int MaxAbsoluteValue(const int arr[], int size) {
-  if (size == 0) return 0;
-  int max_value = arr[0];
+// Задание 4.3: Макс-Модуль. Ищет число, чей модуль является наибольшим.
+int MaxAbs(const int arr[], int size) {
+  if (size <= 0) return 0;
+  int max_v = arr[0];
   for (int i = 1; i < size; ++i) {
-    if (abs(arr[i]) > abs(max_value)) {
-      max_value = arr[i];
-    }
+    if (std::abs(arr[i]) > std::abs(max_v)) max_v = arr[i];
   }
-  return max_value;
+  return max_v;
 }
 
-// Вспомогательная функция для получения целого числа с валидацией.
-int GetIntegerInput(const string& prompt) {
-  int value;
-  while (true) {
-    cout << prompt;
-    cin >> value;
-    if (cin.fail()) {
-      cout << "Ошибка ввода! Пожалуйста, введите целое число." << endl;
-      cin.clear();
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    } else {
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      return value;
-    }
-  }
+// Задание 4.5: Вставка массива. Создает новый массив, вставляя ins внутрь arr.
+int* InsertArray(const int arr[], int size, const int ins[], int ins_size, int pos) {
+  int* res = new int[size + ins_size];
+  for (int i = 0; i < pos; ++i) res[i] = arr[i];
+  for (int i = 0; i < ins_size; ++i) res[pos + i] = ins[i];
+  for (int i = pos; i < size; ++i) res[i + ins_size] = arr[i];
+  return res;
 }
 
-// Вспомогательная функция для получения числа с плавающей точкой с валидацией.
-double GetDoubleInput(const string& prompt) {
-  double value;
-  while (true) {
-    cout << prompt;
-    cin >> value;
-    if (cin.fail()) {
-      cout << "Ошибка ввода! Пожалуйста, введите число." << endl;
-      cin.clear();
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    } else {
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      return value;
-    }
-  }
+// Задание 4.7: Возвратный реверс. Возвращает новый перевернутый массив.
+int* ReverseBack(const int arr[], int size) {
+  int* res = new int[size];
+  for (int i = 0; i < size; ++i) res[i] = arr[size - 1 - i];
+  return res;
 }
 
-// Вспомогательная функция для получения символа с валидацией.
-char GetCharInput(const string& prompt) {
-  string input;
-  
-  while (true) {
-    cout << prompt;
-    getline(cin, input);
-    
-    // Проверка на пустой ввод
-    if (input.empty()) {
-      cout << "Ошибка: ввод не может быть пустым! Пожалуйста, введите цифру." << endl;
-      continue;
-    }
-    
-    // Проверка на ввод одного символа
-    if (input.length() != 1) {
-      cout << "Ошибка: нужно ввести только один символ! Вы ввели: '" << input << "'" << endl;
-      continue;
-    }
-    
-    char value = input[0];
-    
-    // Проверка, является ли символ цифрой
-    if (value < '0' || value > '9') {
-      cout << "Ошибка: символ '" << value << "' не является цифрой от 0 до 9!" << endl;
-      continue;
-    }
-    
-    return value;
-  }
-}
-
-// Выполняет операции с массивом (поиск и максимальный модуль).
-void ProcessArrayOperations() {
-  cout << "\nРабота с массивом" << endl;
-  
-  int size = GetIntegerInput("Введите размер массива: ");
-  if (size <= 0) {
-    cout << "Размер массива должен быть положительным!" << endl;
-    return;
-  }
-  
-  int* arr = new int[size];
-  cout << "Введите " << size << " элементов массива:" << endl;
+// Задание 4.9: Все вхождения. Возвращает массив индексов, где найдено число x.
+int* FindAll(const int arr[], int size, int x) {
+  std::vector<int> found;
   for (int i = 0; i < size; ++i) {
-    arr[i] = GetIntegerInput("Элемент " + to_string(i) + ": ");
+    if (arr[i] == x) found.push_back(i);
   }
-  
-  // Поиск элемента.
-  int search_value = GetIntegerInput("Введите элемент для поиска: ");
-  int position = FindFirstElement(arr, size, search_value);
-  if (position != -1) {
-    cout << "Элемент найден на позиции: " << position << endl;
-  } else {
-    cout << "Элемент не найден в массиве." << endl;
-  }
-  
-  // Максимальный по модулю элемент.
-  int max_abs_value = MaxAbsoluteValue(arr, size);
-  cout << "Элемент с максимальным модулем: " << max_abs_value
-       << " (модуль: " << abs(max_abs_value) << ")" << endl;
-  
-  delete[] arr;
+  int* res = new int[found.size() + 1];
+  res[0] = static_cast<int>(found.size());
+  for (size_t i = 0; i < found.size(); ++i) res[i + 1] = found[i];
+  return res;
 }
