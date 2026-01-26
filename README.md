@@ -5,191 +5,124 @@
 
 # Постановка задач
 
-Задание 1.1.1
-Вычислить дробную часть вещественного числа.
+Задание 1.1
+
+Дробная часть: выделяет 0.xx из числа x
 
 Алгоритм:
 
-1) Получить вещественное число от пользователя
-2) Вычислить дробную часть: число минус его целая часть
-3) Вывести результат
+1. Получить вещественное число x.
+2. Преобразовать x в целое число (отбросив дробную часть) через static_cast<long>.
+3. Вычесть полученное целое из исходного числа x.
+4. Вернуть результат. Реализация:
 
 # Реализация: 
 
 ```cpp
-void Lab1::Task1Fraction() {
-  double number = GetDouble("Введите вещественное число: ");
-  double result = Fraction(number);
-  std::cout << "Дробная часть числа " << number << " = " << result << std::endl;
-}
-
-double Lab1::Fraction(double x) {
-  return x - static_cast<int>(x);
+double Fraction(double x) {
+  return x - static_cast<long>(x);
 }
 ```
 
 # Тестирование
-<img width="236" height="67" alt="image" src="https://github.com/user-attachments/assets/985fd5e5-897d-448f-a85d-8042a035e44d" />
-<img width="260" height="67" alt="image" src="https://github.com/user-attachments/assets/99ae58a7-c674-4686-9338-35f41cbfec56" />
-<img width="231" height="63" alt="image" src="https://github.com/user-attachments/assets/a589725d-11d8-4d97-a2ac-2fdc9ec31298" />
+<img width="184" height="59" alt="image" src="https://github.com/user-attachments/assets/8b7e5bad-c330-49f8-beb5-b10a5bee5e0c" />
+<img width="153" height="60" alt="image" src="https://github.com/user-attachments/assets/ae82b155-9fe7-48ba-b8be-1890310f22cd" />
 
-# Задание 1.1.2
+
+
+
+# Задание 1.3
 Преобразовать символ цифры в её ASCII код.
 
 Алгоритм:
 
-1) Получить символ от пользователя.
-2) Проверить, является ли символ цифрой (0-9).
-3) Преобразовать символ в целое число (ASCII код).
-4)Вывести результат.
+1. Получить символ x.
+2. Проверить, лежит ли код символа в пределах от '0' до '9'.
+3. Если да, вычесть из кода x код символа '0'.
+4. Если нет, вернуть -1. Реализация:
 
 # Реализация:
 
 ```cpp
-void Lab1::Task2CharToAscii() {
-  std::string input;
-  while (true) {
-    std::cout << "Введите один символ цифры (0-9): ";
-    std::getline(std::cin, input);
-    
-    // Проверка на пустой ввод
-    if (input.empty()) {
-      std::cout << "Ошибка: ввод не может быть пустым!" << std::endl;
-      continue;
-    }
-    
-    // Проверка на ввод одного символа
-    if (input.length() != 1) {
-      std::cout << "Ошибка: нужно ввести только один символ!" << std::endl;
-      continue;
-    }
-    
-    char symbol = input[0];
-    
-    // Проверка, является ли символ цифрой
-    if (symbol < '0' || symbol > '9') {
-      std::cout << "Ошибка: символ '" << symbol << "' не является цифрой от 0 до 9!" << std::endl;
-      continue;
-    }
-    
-    // Если все проверки пройдены, преобразуем в ASCII код
-    int ascii_code = CharToNum(symbol);
-    std::cout << "Символ: '" << symbol << "'" << std::endl;
-    std::cout << "ASCII код: " << ascii_code << std::endl;
-    std::cout << "Результат: " << ascii_code << std::endl;
-    break;
-  }
-}
-
-int Lab1::CharToNum(char x) {
-  return static_cast<int>(x);
-}
+int CharToNum(char x) {
+  if (x >= '0' && x <= '9') return x - '0';
+  return -1;
 }
 ```
 
 # Тестирование:
-<img width="297" height="58" alt="image" src="https://github.com/user-attachments/assets/148d1eed-da47-469b-8552-93e93231fb3b" />
-<img width="399" height="74" alt="image" src="https://github.com/user-attachments/assets/3252c4fd-73de-44d6-a6ad-4759c1bf66f9" />
+<img width="205" height="58" alt="image" src="https://github.com/user-attachments/assets/389656eb-7c4d-4749-9ce1-f8e603b86a01" />
+<img width="187" height="59" alt="image" src="https://github.com/user-attachments/assets/3e4fd2bf-4911-4deb-8c9a-fe20b771d712" />
 
-# Задание 1.1.3
+
+# Задание 1.5
 Проверить, является ли число двузначным.
 
 Алгоритм:
 
-1) Получить целое число от пользователя.
-2) Вычислить абсолютное значение числа.
-3) Проверить, находится ли число в диапазоне [10, 99].
-4) Вывести результат.
+1. Получить число x.
+2. Взять модуль числа для учета отрицательных значений.
+3. Проверить, находится ли результат в интервале $[10, 99]$.
 
 # Реализация:
 ```cpp
-void Lab1::Task3TwoDigits() {
-  int number = GetInteger("Введите целое число: ");
-  bool is_two_digit = IsTwoDigits(number);
-  std::cout << "Число " << number 
-            << (is_two_digit ? " является" : " не является") 
-            << " двузначным" << std::endl;
-}
-
-bool Lab1::IsTwoDigits(int x) {
-  int abs_x = (x < 0) ? -x : x;
+bool IsTwoDigits(int x) {
+  int abs_x = std::abs(x);
   return (abs_x >= 10 && abs_x <= 99);
 }
 ```
 # Тестирование:
-<img width="300" height="61" alt="image" src="https://github.com/user-attachments/assets/6cd3fed0-091e-4adc-9877-da8f09da9a68" />
-<img width="298" height="72" alt="image" src="https://github.com/user-attachments/assets/d7aa1515-8417-4d0c-97ff-f8a8500aa3a2" />
-<img width="291" height="67" alt="image" src="https://github.com/user-attachments/assets/b637d7f0-072a-400b-bd74-7eb22d90dbc2" />
-<img width="313" height="60" alt="image" src="https://github.com/user-attachments/assets/51d16bc9-ccad-44d9-aa74-bfebb8b80ceb" />
+<img width="159" height="54" alt="image" src="https://github.com/user-attachments/assets/c2622b8c-b320-4235-a85b-2e005818fd3b" />
+<img width="171" height="61" alt="image" src="https://github.com/user-attachments/assets/b8aab656-f236-4617-8a2a-1d9fe894aaba" />
+<img width="168" height="52" alt="image" src="https://github.com/user-attachments/assets/d56e8584-7a4d-454d-a958-3e7b57bd84e9" />
+<img width="157" height="57" alt="image" src="https://github.com/user-attachments/assets/9e67768b-417e-4dc0-b6f4-30ce6d78b4f6" />
 
-# Задание 1.1.4
+
+
+
+# Задание 1.7
 Проверить, находится ли число в заданном диапазоне.
 
 Алгоритм:
-1) Получить границы диапазона a и b.
-2) Получить число для проверки.
-3) Проверить, находится ли число между a и b (включительно).
-4) Вывести результат.
+
+1. Получить границы a, b и число num.
+2. Найти минимальное и максимальное из a и b.
+3. Проверить, входит ли num в этот интервал. Реализация:
 
 # Реализация:
 ```cpp
-void Lab1::Task4InRange() {
-  int a = GetInteger("Введите начало диапазона (a): ");
-  int b = GetInteger("Введите конец диапазона (b): ");
-  int number = GetInteger("Введите число для проверки: ");
-  
-  bool in_range = IsInRange(a, b, number);
-  int min_val = (a < b) ? a : b;
-  int max_val = (a > b) ? a : b;
-  
-  std::cout << "Число " << number 
-            << (in_range ? " находится" : " не находится")
-            << " в диапазоне [" << min_val << ", " << max_val << "]" << std::endl;
-}
-
-bool Lab1::IsInRange(int a, int b, int num) {
-  return (a <= num && num <= b) || (b <= num && num <= a);
+bool IsInRange(int a, int b, int num) {
+  return (num >= std::min(a, b) && num <= std::max(a, b));
 }
 ```
 # Тестирование 
 
-<img width="312" height="99" alt="image" src="https://github.com/user-attachments/assets/8ddbd322-430c-41d2-b46e-af5f2109e970" />
-<img width="363" height="92" alt="image" src="https://github.com/user-attachments/assets/9382f93e-2fc7-4916-9c4a-b10d398b26aa" />
+<img width="190" height="93" alt="image" src="https://github.com/user-attachments/assets/12158434-767a-457b-892e-9fb6948e383b" />
+<img width="218" height="87" alt="image" src="https://github.com/user-attachments/assets/8a702a57-d19e-4004-a898-6b4734db89d7" />
 
-# Задание 1.1.5
+
+# Задание 1.9
 Проверить, равны ли три числа между собой.
 
 Алгоритм:
 1) Получить три целых числа.
-2) Проверить, равны ли все три числа.
-3) Вывести результат.
+2) Сравнить первое со вторым и второе с третьим.
+3) Вернуть true, если оба сравнения истинны.
 
 # Реализация:
-```
-cpp
-void Lab1::Task5ThreeEqual() {
-  int a = GetInteger("Введите число a: ");
-  int b = GetInteger("Введите число b: ");
-  int c = GetInteger("Введите число c: ");
-  
-  bool all_equal = AreEqual(a, b, c);
-  std::cout << "Числа " << a << ", " << b << ", " << c
-            << (all_equal ? " равны" : " не равны")
-            << " между собой" << std::endl;
-}
 
-bool Lab1::AreEqual(int a, int b, int c) {
+```cpp
+bool AreEqual(int a, int b, int c) {
   return (a == b && b == c);
 }
 ```
 # Тестирование:
-<img width="263" height="105" alt="image" src="https://github.com/user-attachments/assets/a70631d8-44ed-4ab5-b1fa-914670185489" />
-<img width="335" height="106" alt="image" src="https://github.com/user-attachments/assets/34254991-8388-4ae1-8b6a-766614ee1bd9" />
-<img width="300" height="100" alt="image" src="https://github.com/user-attachments/assets/4e62d739-549c-4814-baf2-ac0aeda02cb3" />
-<img width="294" height="97" alt="image" src="https://github.com/user-attachments/assets/2c1ffbca-fbea-42d2-be9a-df81bc4d6cc9" />
+
+<img width="135" height="88" alt="image" src="https://github.com/user-attachments/assets/7a516e31-9067-45e5-8164-548033b1f241" />
+<img width="177" height="95" alt="image" src="https://github.com/user-attachments/assets/820ea403-2ebc-4bb5-b2c9-f42d48a87d1f" />
 
 
-# Задание 1.2.1
+# Задание 2.1
 Вычислить модуль целого числа.
 
 Алгоритм:
@@ -198,86 +131,67 @@ bool Lab1::AreEqual(int a, int b, int c) {
 3) Вывести результат.
 
 # Реализация:
-```
-cpp
-void Lab1::Task6Absolute() {
-  int number = GetInteger("Введите целое число: ");
-  int absolute = MyAbs(number);
-  std::cout << "|" << number << "| = " << absolute << std::endl;
-}
-
-int Lab1::MyAbs(int x) {
-  return (x >= 0) ? x : -x;
+```cpp
+int MyAbs(int x) {
+  return (x < 0) ? -x : x;
 }
 ```
 # Тестирование:
 
-<img width="230" height="62" alt="image" src="https://github.com/user-attachments/assets/f0ca6602-540d-4218-a13a-34545a228275" />
-<img width="204" height="63" alt="image" src="https://github.com/user-attachments/assets/abf4c432-5624-42bc-a461-50caf3986fbf" />
+<img width="173" height="57" alt="image" src="https://github.com/user-attachments/assets/45718d3d-c8f9-4c22-b506-4a9daf09c8b2" />
+<img width="147" height="54" alt="image" src="https://github.com/user-attachments/assets/4c8d0106-e5af-4f83-bbd5-ddb9de20a59b" />
 
-# Задание 1.2.2
-Проверить, делится ли число на 3 или 5, но не на 15.
+
+# Задание 2.3
+Проверить, делится ли число на 3 или 5, но не на оба сразу. 
 
 Алгоритм:
 
 1) Получить целое число.
 2) Проверить делимость на 3 или 5.
 3) Проверить, что число не делится на оба из них
-4) Вывести результат.
+4) Вернуть true, если истинно только одно из условий.
 
 # Реализация:
 ```cpp
-void Lab1::Task7DivisibleBy3Or5() {
-  int number = GetInteger("Введите целое число: ");
-  bool result = IsDivisibleBy3Or5ButNot15(number);
-  std::cout << "Число " << number
-            << (result ? " делится" : " не делится")
-            << " на 3 или 5, но не на 15" << std::endl;
-}
-
-bool Lab1::IsDivisibleBy3Or5ButNot15(int x) {
-  return ((x % 3 == 0 || x % 5 == 0) && x % 15 != 0);
+bool Is35(int x) {
+  bool d3 = (x % 3 == 0);
+  bool d5 = (x % 5 == 0);
+  return (d3 || d5) && !(d3 && d5);
 }
 ```
 # Тестирование:
+<img width="158" height="63" alt="image" src="https://github.com/user-attachments/assets/90184e21-1e93-44f8-aa12-1f855711e6c3" />
+<img width="166" height="53" alt="image" src="https://github.com/user-attachments/assets/dca2ec20-ba74-464b-a4fc-b7527b5441d1" />
+<img width="163" height="56" alt="image" src="https://github.com/user-attachments/assets/e74b3a9b-8595-47dd-985d-f3f061276963" />
 
-<img width="419" height="68" alt="image" src="https://github.com/user-attachments/assets/33f1ae1c-1251-4184-a8fa-4d0673f983ff" />
-<img width="425" height="68" alt="image" src="https://github.com/user-attachments/assets/ade024c9-58bf-4e7f-8eb6-e21552b071d4" />
-<img width="416" height="72" alt="image" src="https://github.com/user-attachments/assets/07359a20-9fc6-4e6d-b5b2-0a1f21609d28" />
 
-# Задание 1.2.3
+
+# Задание 2.5
 Найти максимальное из трех чисел.
 
 Алгоритм:
 1) Получить три целых числа.
 2) Сравнить числа, найти наибольшее.
-3) Вывести результат.
+3) Вернуть наибольшее значение.
 
 #Реализация:
 
 ```cpp
-void Lab1::Task8MaximumOfThree() {
-  int x = GetInteger("Введите число x: ");
-  int y = GetInteger("Введите число y: ");
-  int z = GetInteger("Введите число z: ");
-  
-  int maximum = MaxOfThree(x, y, z);
-  std::cout << "Максимальное из чисел " << x << ", " << y << ", " << z
-            << " = " << maximum << std::endl;
-}
-
-int Lab1::MaxOfThree(int x, int y, int z) {
-  int max_value = x;
-  if (y > max_value) max_value = y;
-  if (z > max_value) max_value = z;
-  return max_value;
+int MaxOfThree(int x, int y, int z) {
+  return std::max({x, y, z});
 }
 ```
 # Тестирование: 
-<img width="270" height="101" alt="image" src="https://github.com/user-attachments/assets/52cf2834-fbfc-4162-ab4c-e557014b4b50" />
-<img width="270" height="94" alt="image" src="https://github.com/user-attachments/assets/8193b533-bf97-4329-bc03-d068e5c79d88" />
+<img width="148" height="97" alt="image" src="https://github.com/user-attachments/assets/f7b4ae86-2adc-4783-b6c9-91014d96956e" />
+<img width="138" height="89" alt="image" src="https://github.com/user-attachments/assets/c11d641e-9b80-4d28-90ab-e9339df49e71" />
+<img width="155" height="90" alt="image" src="https://github.com/user-attachments/assets/e1c5761c-7358-4edb-ae58-37c11646e451" />
 
-# Задание 1.2.4
+
+
+
+
+# Задание 2.7
 Вычислить сумму с особым условием.
 
 Алгоритм:
@@ -291,25 +205,18 @@ int Lab1::MaxOfThree(int x, int y, int z) {
 # Реализация:
 
 ```cpp
-void Lab1::Task9SpecialSum() {
-  int x = GetInteger("Введите число x: ");
-  int y = GetInteger("Введите число y: ");
-  
-  int result = SpecialSum(x, y);
-  std::cout << "Сумма " << x << " + " << y << " = " << result << std::endl;
-}
-
-int Lab1::SpecialSum(int x, int y) {
+int SpecialSum(int x, int y) {
   int sum = x + y;
   return (sum >= 10 && sum <= 19) ? 20 : sum;
 }
 ```
 # Тестирование:
 
-<img width="298" height="85" alt="image" src="https://github.com/user-attachments/assets/57bbd609-8f42-4d3c-833e-2892b9567e1d" />
-<img width="279" height="84" alt="image" src="https://github.com/user-attachments/assets/875167c7-c42d-4dbc-95ea-0fe67dd904fd" />
+<img width="138" height="75" alt="image" src="https://github.com/user-attachments/assets/2969822c-aba8-476e-985b-3de50d8c43f3" />
+<img width="140" height="69" alt="image" src="https://github.com/user-attachments/assets/14253ed0-ef01-422f-ba29-294ef9d56b4e" />
 
-# Задание 1.2.5
+
+# Задание 2.9
 Преобразовать номер дня недели в название.
 
 Алгоритм:
@@ -319,321 +226,258 @@ int Lab1::SpecialSum(int x, int y) {
 3) Вывести название дня недели.
 
 # Реализация:
-```
-cpp
-void Lab1::Task10DayOfWeek() {
-  int day_number = GetInteger("Введите номер дня недели (1-7): ");
-  std::string day_name = DayOfWeek(day_number);
-  std::cout << "День недели: " << day_name << std::endl;
-}
-
-std::string Lab1::DayOfWeek(int x) {
+```cpp
+std::string DayOfWeek(int x) {
   switch (x) {
-    case 1: return "понедельник";
-    case 2: return "вторник";
-    case 3: return "среда";
-    case 4: return "четверг";
-    case 5: return "пятница";
-    case 6: return "суббота";
-    case 7: return "воскресенье";
-    default: return "неверный номер дня";
+    case 1: return "Понедельник";
+    /* ... остальные дни ... */
+    default: return "Ошибка";
   }
 }
 ```
 # Тестирование:
 
-<img width="323" height="62" alt="image" src="https://github.com/user-attachments/assets/a71a7f75-b1e5-4392-ad1a-bf97b6f684ec" />
+<img width="156" height="58" alt="image" src="https://github.com/user-attachments/assets/717332be-09c5-49c4-8c7d-5e6fc90d73a3" />
+<img width="140" height="55" alt="image" src="https://github.com/user-attachments/assets/d90b79e7-8aec-4d8b-ba48-927fb55f4b2b" />
 
-# Задание 1.3.1
+
+# Задание 3.1
 Вывести последовательность чисел от 0 до N.
 
 Алгоритм:
 
-1) Получить целое неотрицательное число N.
-2) Использовать цикл для генерации чисел от 0 до N.
-3) Вывести числа через пробел.
+1. Запустить цикл от 0 до x.
+2. Конкатенировать числа в строку
 
 # Реализация:
 
 ```cpp
-void Lab1::Task11ListNumbers() {
-  int n = GetInteger("Введите число N: ");
-  
-  if (n < 0) {
-    std::cout << "Ошибка: N должно быть неотрицательным!" << std::endl;
-    return;
-  }
-  
-  std::string sequence = ListNumbers(n);
-  std::cout << "Последовательность: " << sequence << std::endl;
-}
-
-std::string Lab1::ListNumbers(int x) {
-  std::string result;
-  for (int i = 0; i <= x; ++i) {
-    result += std::to_string(i);
-    if (i < x) result += " ";
-  }
-  return result;
+std::string ListNumbers(int x) {
+  std::string res = "";
+  for (int i = 0; i <= x; ++i) res += std::to_string(i) + " ";
+  return res;
 }
 ```
 # Тестирование:
 
-<img width="311" height="59" alt="image" src="https://github.com/user-attachments/assets/9c57ce80-a88a-467c-8a37-018114655cc3" />
+<img width="184" height="59" alt="image" src="https://github.com/user-attachments/assets/fed1d834-4ee4-47b2-ac10-3d324fd45891" />
+<img width="145" height="58" alt="image" src="https://github.com/user-attachments/assets/a18601b3-85e5-43ab-9d01-b411c6600388" />
 
-# Задание 1.3.2
+
+# Задание 3.3
 Вывести четные числа от 0 до N.
 
 Алгоритм:
 
-1) Получить целое неотрицательное число N.
-2) Использовать цикл с шагом 2 для генерации четных чисел.
-3) Вывести числа через пробел.
+1) Цикл от 0 до x с шагом 2.
 
 # Реализация:
 
 ```cpp
-void Lab1::Task12EvenNumbers() {
-  int n = GetInteger("Введите число N: ");
-  
-  if (n < 0) {
-    std::cout << "Ошибка: N должно быть неотрицательным!" << std::endl;
-    return;
-  }
-  
-  std::string evens = EvenNumbers(n);
-  std::cout << "Четные числа: " << evens << std::endl;
-}
-
-std::string Lab1::EvenNumbers(int x) {
-  std::string result;
-  bool first = true;
-  for (int i = 0; i <= x; i += 2) {
-    if (!first) result += " ";
-    result += std::to_string(i);
-    first = false;
-  }
-  return result;
+std::string EvenNumbers(int x) {
+  std::string res = "";
+  for (int i = 0; i <= x; i += 2) res += std::to_string(i) + " ";
+  return res;
 }
 ```
 # Тестирование:
 
-<img width="240" height="62" alt="image" src="https://github.com/user-attachments/assets/cda60a7c-a38c-45f5-a4e7-da9f5e119ba2" />
+<img width="151" height="56" alt="image" src="https://github.com/user-attachments/assets/66a20b5c-fb75-4d5e-bbb2-c97d65e8526b" />
+<img width="143" height="52" alt="image" src="https://github.com/user-attachments/assets/0601b0e5-b60d-40de-bd84-b7dca8292e1c" />
 
-# Задание 1.3.3
+
+# Задание 3.5
 Подсчитать количество цифр в числе.
 
 Алгоритм:
 
-1) Получить целое число.
-2) Взять абсолютное значение числа.
-3) Использовать цикл деления на 10 для подсчета цифр.
-4) Вывести результат.
+1) Пока число не равно 0, делить его на 10 и инкрементировать счетчик.
 
 Реализация:
 
 ```cpp
-void Lab1::Task13DigitCount() {\
-  long number = GetInteger("Введите целое число: ");
-  int digits = DigitCount(number);
-  std::cout << "Количество цифр в числе " << number << ": " << digits << std::endl;
-}
-
-int Lab1::DigitCount(long x) {
+int DigitCount(long x) {
   if (x == 0) return 1;
-  
-  long abs_x = (x < 0) ? -x : x;
-  int count = 0;
-  
-  while (abs_x > 0) {
-    ++count;
-    abs_x /= 10;
-  }
-  
+  int count = 0; long temp = std::abs(x);
+  while (temp > 0) { temp /= 10; count++; }
   return count;
 }
 ```
 Тестирование:
 
-<img width="289" height="63" alt="image" src="https://github.com/user-attachments/assets/2139e2c4-35b4-40cc-a66b-e004f84a3ba3" />
+<img width="160" height="58" alt="image" src="https://github.com/user-attachments/assets/aff144dd-2749-462b-ae39-ab072bd71bbd" />
+<img width="165" height="56" alt="image" src="https://github.com/user-attachments/assets/47111337-92d7-4067-8a1e-4c2e482cb0ca" />
 
-# Задание 1.3.4
+
+# Задание 3.7
 Нарисовать квадрат из звездочек.
 
 Алгоритм:
 
-1) Получить размер квадрата.
-2) Использовать вложенные циклы для рисования.
-3) Вывести квадрат.
+1. Получить размер квадрата.
+2. Использовать вложенные циклы для рисования.
+3. Вывести квадрат.
 
 # Реализация:
 
 ```cpp
-void Lab1::Task14DrawSquare() {
-  int size = GetInteger("Введите размер квадрата: ");
-  
-  if (size <= 0) {
-    std::cout << "Ошибка: размер должен быть положительным!" << std::endl;
-    return;
-  }
-  
-  std::cout << "\nКвадрат " << size << "x" << size << ":\n" << std::endl;
-  DrawSquare(size);
-}
-
-void Lab1::DrawSquare(int x) {
+void DrawSquare(int x) {
   for (int i = 0; i < x; ++i) {
-    for (int j = 0; j < x; ++j) {
-      std::cout << "*";
-    }
-    std::cout << std::endl;
+    for (int j = 0; j < x; ++j) std::cout << "*";
+    std::cout << "\n";
   }
 }
 ```
 # Тестирование:
+<img width="148" height="114" alt="image" src="https://github.com/user-attachments/assets/241a97c9-0492-41fe-8e67-b8150d48037e" />
+<img width="155" height="105" alt="image" src="https://github.com/user-attachments/assets/a9740982-03a1-4464-b19a-ecc9c5316951" />
 
-<img width="231" height="165" alt="image" src="https://github.com/user-attachments/assets/3dfba1f2-c53e-446a-aae3-0723a178974d" />
 
-# Задание 1.3.5
+# Задание 3.9
 Нарисовать прямоугольный треугольник из звездочек.
 
 Алгоритм:
 
-1) Получить высоту треугольника.
-2) Использовать вложенные циклы для рисования.
-3) Первый цикл для строк, второй для пробелов, третий для звездочек.
-4) Вывести треугольник.
+1. Получить высоту треугольника.
+2. Внешний цикл i от 1 до x.
+3. Внутренний цикл: печатать x-i пробелов и i звезд
+4. Вывести треугольник.
 
 Реализация:
 
 ```cpp
-void Lab1::Task15DrawTriangle() {
-  int height = GetInteger("Введите высоту треугольника: ");
-  
-  if (height <= 0) {
-    std::cout << "Ошибка: высота должна быть положительной!" << std::endl;
-    return;
-  }
-  
-  std::cout << "\nТреугольник высотой " << height << ":\n" << std::endl;
-  DrawRightTriangle(height);
-}
-
-void Lab1::DrawRightTriangle(int x) {
+void DrawRightTriangle(int x) {
   for (int i = 1; i <= x; ++i) {
-    // Пробелы для выравнивания
-    for (int j = 0; j < x - i; ++j) {
-      std::cout << " ";
-    }
-    // Звездочки
-    for (int j = 0; j < i; ++j) {
-      std::cout << "*";
-    }
-    std::cout << std::endl;
+    for (int j = 0; j < x-i; ++j) std::cout << " ";
+    for (int k = 0; k < i; ++k) std::cout << "*";
+    std::cout << "\n";
   }
 }
 ```
 # Тестирование:
 
-<img width="292" height="150" alt="image" src="https://github.com/user-attachments/assets/6cd0838c-b731-4cc6-b8cf-996299d95d2c" />
+<img width="142" height="103" alt="image" src="https://github.com/user-attachments/assets/7599b43e-4bb3-4df4-a05e-c32e81670d25" />
+<img width="112" height="122" alt="image" src="https://github.com/user-attachments/assets/6f759973-7dc8-4b2f-869a-c474cf156b56" />
 
-# Задание 1.4.1
+
+# Задание 4.1
 Найти первое вхождение элемента в массиве.
 
 Алгоритм:
 
 1) Создать или получить массив чисел.
-2) Получить элемент для поиска.
 3) Пройти по массиву, найти первое вхождение.
 4) Вывести индекс или сообщение об отсутствии.
 
 Реализация:
 
 ```cpp
-void Lab1::Task16FindInArray() {  
-  std::cout << "Создание массива:" << std::endl;
-  std::vector<int> array = CreateArrayFromInput();
-  
-  if (array.empty()) {
-    std::cout << "Массив пуст!" << std::endl;
-    return;
-  }
-  
-  int search_value = GetInteger("Введите элемент для поиска: ");
-  int position = FindFirstElement(array, search_value);
-  
-  if (position != -1) {
-    std::cout << "Элемент " << search_value << " найден на позиции " << position << std::endl;
-  } else {
-    std::cout << "Элемент " << search_value << " не найден в массиве" << std::endl;
-  }
-}
-
-int Lab1::FindFirstElement(const std::vector<int>& arr, int x) {
-  for (size_t i = 0; i < arr.size(); ++i) {
-    if (arr[i] == x) {
-      return static_cast<int>(i);
-    }
-  }
+int FindFirstElement(const int arr[], int size, int x) {
+  for (int i = 0; i < size; ++i) if (arr[i] == x) return i;
   return -1;
 }
 ```
 # Тестирование:
 
+<img width="188" height="157" alt="image" src="https://github.com/user-attachments/assets/1c689411-5e41-4545-9530-54be4a008914" />
+<img width="173" height="126" alt="image" src="https://github.com/user-attachments/assets/fc8abe00-7670-4c68-83a1-b0aae8dcd5a9" />
 
-<img width="330" height="159" alt="image" src="https://github.com/user-attachments/assets/f59fb937-3f6e-4556-a295-304b17f7f68e" />
 
-<img width="336" height="158" alt="image" src="https://github.com/user-attachments/assets/2af10f99-718e-4e76-99c1-7ed974564358" />
 
-# Задание 1.4.2
+
+# Задание 4.3
 Найти элемент с максимальным модулем в массиве.
 
 Алгоритм:
 
-1) Создать или получить массив чисел.
-2) Пройти по массиву, сравнивая модули элементов.
-3) Запомнить элемент с наибольшим модулем.
-4) Вывести результат.
+1. Создать или получить массив чисел.
+2. Пройти по массиву, сравнивая модули элементов.
+3. Запомнить элемент с наибольшим модулем.
+4. Вывести результат.
 
 # Реализация:
 
 ```cpp
-void Lab1::Task17MaxAbsoluteInArray() {
-  std::cout << "Создание массива:" << std::endl;
-  std::vector<int> array = CreateArrayFromInput();
-  
-  if (array.empty()) {
-    std::cout << "Массив пуст!" << std::endl;
-    return;
-  }
-  
-  int max_abs_value = MaxAbsoluteValue(array);
-  std::cout << "Элемент с максимальным модулем: " << max_abs_value << std::endl;
-  std::cout << "Модуль: " << MyAbs(max_abs_value) << std::endl;
-}
-
-int Lab1::MaxAbsoluteValue(const std::vector<int>& arr) {
-  if (arr.empty()) return 0;
-  
-  int max_abs_elem = arr[0];
-  int max_abs = MyAbs(arr[0]);
-  
-  for (size_t i = 1; i < arr.size(); ++i) {
-    int current_abs = MyAbs(arr[i]);
-    if (current_abs > max_abs) {
-      max_abs = current_abs;
-      max_abs_elem = arr[i];
-    }
-  }
-  
-  return max_abs_elem;
+int MaxAbs(const int arr[], int size) {
+  int max_v = arr[0];
+  for (int i = 1; i < size; ++i)
+    if (std::abs(arr[i]) > std::abs(max_v)) max_v = arr[i];
+  return max_v;
 }
 ```
 
 # Тестирование:
-<img width="331" height="159" alt="image" src="https://github.com/user-attachments/assets/4b63fe9d-88f1-4bf0-ab8d-9c2474022d12" />
+<img width="177" height="139" alt="image" src="https://github.com/user-attachments/assets/9ed153a0-4988-416e-a9ad-14113ce75d55" />
+<img width="183" height="109" alt="image" src="https://github.com/user-attachments/assets/f26d006d-d24a-4399-9c8f-c48074ebfa83" />
+
+
+# Задание 4.5
+Вставка: вставляет один массив в другой по индексу
+
+Алгоритм:
+1. Выделить новую память.
+2. Копировать часть 1, затем вставку, затем остаток части 1. Реализация:
+
+# Реализация
+```cpp
+int* InsertArray(const int arr[], int size, const int ins[], int ins_size, int pos) {
+  int* res = new int[size + ins_size];
+  for (int i = 0; i < pos; ++i) res[i] = arr[i];
+  for (int i = 0; i < ins_size; ++i) res[pos + i] = ins[i];
+  for (int i = pos; i < size; ++i) res[i + ins_size] = arr[i];
+  return res;
+}
+```
+
+# Тестирование
+
+<img width="324" height="223" alt="image" src="https://github.com/user-attachments/assets/5e2fb3f7-dc00-4e9a-a1fc-1fc82d361735" />
+<img width="328" height="222" alt="image" src="https://github.com/user-attachments/assets/0ecb858a-fce8-4ebe-afa7-9ae8b12dd235" />
 
 
 
+# Задание 4.7
+Реверс: создает новый массив-копию, перевернутый задом наперед
+
+Алгоритм:
+1. Создать новый массив.
+2.Заполнить его элементами оригинала с конца.
+
+# Реализация 
+```cpp
+int* ReverseBack(const int arr[], int size) {
+  int* res = new int[size];
+  for (int i = 0; i < size; ++i) res[i] = arr[size - 1 - i];
+  return res;
+}
+```
 
 
+# Тестирование
+
+<img width="184" height="141" alt="image" src="https://github.com/user-attachments/assets/855d0984-e266-4c90-8e0b-ac511a0fb624" />
+
+
+
+# Задание 4.9
+
+Все вхождения: ищет все индексы числа в массиве
+
+Алгоритм:
+1. Собрать индексы совпадений.
+2. Сохранить размер в res[0], затем сами индексы.
+
+# Реализация 
+```cpp
+int* FindAll(const int arr[], int size, int x) {
+  std::vector<int> found;
+  for (int i = 0; i < size; ++i) if (arr[i] == x) found.push_back(i);
+  int* res = new int[found.size() + 1];
+  res[0] = found.size();
+  for (size_t i = 0; i < found.size(); ++i) res[i + 1] = found[i];
+  return res;
+}
+```
+
+# Тестирование
+<img width="200" height="164" alt="image" src="https://github.com/user-attachments/assets/f2749f0c-4f27-48ae-8bda-a7b2daa6ef11" />
