@@ -70,7 +70,7 @@ int main() {
         int res = CharToNum(c);
         if (res != -1) std::cout << "Результат: " << res << std::endl;
         else std::cout << "Ошибка: это не цифра!" << std::endl;
-        CleanStdin(); // Очистка после ввода char, чтобы не сломать меню
+        CleanStdin(); 
         break;
       }
       case 3:
@@ -86,33 +86,88 @@ int main() {
         std::cout << "Результат: " << AreEqual(a, b, c) << std::endl;
         break;
       }
+      case 6:
+        std::cout << "Результат: " << MyAbs(SafeIntInput("Число: ")) << std::endl;
+        break;
       case 7:
         std::cout << "Результат: " << Is35(SafeIntInput("Число: ")) << std::endl;
         break;
+      case 8: {
+        int a = SafeIntInput("1: "), b = SafeIntInput("2: "), c = SafeIntInput("3: ");
+        std::cout << "Результат: " << MaxOfThree(a, b, c) << std::endl;
+        break;
+      }
+      case 9: {
+        int a = SafeIntInput("1: "), b = SafeIntInput("2: ");
+        std::cout << "Результат: " << SpecialSum(a, b) << std::endl;
+        break;
+      }
       case 10:
         std::cout << DayOfWeek(SafeIntInput("Номер дня: ")) << std::endl;
         break;
-      case 14:
-        DrawSquare(SafeIntInput("Сторона: "));
+      case 11:
+        std::cout << "Результат: " << ListNumbers(SafeIntInput("N: ")) << std::endl;
         break;
+      case 12:
+        std::cout << "Результат: " << EvenNumbers(SafeIntInput("N: ")) << std::endl;
+        break;
+      case 13: {
+        long n;
+        std::cout << "Введите число: ";
+        if (!(std::cin >> n)) CleanStdin();
+        else std::cout << "Результат: " << DigitCount(n) << std::endl;
+        break;
+      }
+      case 14:
+        DrawSquare(SafeIntInput("Введите сторону: "));
+        break;
+      case 15:
+        DrawRightTriangle(SafeIntInput("Введите высоту: "));
+        break;
+      case 16: {
+        int s = SafeIntInput("Размер массива: ");
+        int* a = new int[s];
+        for(int i=0; i<s; ++i) a[i] = SafeIntInput("Введите элемент: ");
+        int x = SafeIntInput("Ищем элемент: ");
+        std::cout << "Индекс: " << FindFirstElement(a, s, x) << std::endl;
+        delete[] a;
+        break;
+      }
+      case 17: {
+        int s = SafeIntInput("Размер массива: ");
+        int* a = new int[s];
+        for(int i=0; i<s; ++i) a[i] = SafeIntInput("Введите элемент: ");
+        std::cout << "Результат: " << MaxAbs(a, s) << std::endl;
+        delete[] a;
+        break;
+      }
       case 18: {
-        int s1 = SafeIntInput("Размер 1: ");
+        int s1 = SafeIntInput("Размер 1 массива: ");
         int* a1 = new int[s1];
-        for(int i=0; i<s1; ++i) a1[i] = SafeIntInput("Эл: ");
-        int s2 = SafeIntInput("Размер 2: ");
+        for(int i=0; i<s1; ++i) a1[i] = SafeIntInput("Введите элемент: ");
+        int s2 = SafeIntInput("Размер 2 массива: ");
         int* a2 = new int[s2];
-        for(int i=0; i<s2; ++i) a2[i] = SafeIntInput("Эл: ");
-        int p = SafeIntInput("Поз: ");
+        for(int i=0; i<s2; ++i) a2[i] = SafeIntInput("Введите элемент: ");
+        int p = SafeIntInput("После какого элемента выполнить вставку: ");
         int* r = InsertArray(a1, s1, a2, s2, p);
         for(int i=0; i<(s1+s2); ++i) std::cout << r[i] << " ";
         delete[] a1; delete[] a2; delete[] r;
         break;
       }
-      case 20: {
-        int s = SafeIntInput("Размер: ");
+      case 19: {
+        int s = SafeIntInput("Размер массива: ");
         int* a = new int[s];
-        for(int i=0; i<s; ++i) a[i] = SafeIntInput("Эл: ");
-        int x = SafeIntInput("Ищем: ");
+        for(int i=0; i<s; ++i) a[i] = SafeIntInput("Введите элемент: ");
+        int* r = ReverseBack(a, s);
+        for(int i=0; i<s; ++i) std::cout << r[i] << " ";
+        delete[] a; delete[] r;
+        break;
+      }
+      case 20: {
+        int s = SafeIntInput("Размер массива: ");
+        int* a = new int[s];
+        for(int i=0; i<s; ++i) a[i] = SafeIntInput("Введите элемент: ");
+        int x = SafeIntInput("Ищем вхождение числа: ");
         int* r = FindAll(a, s, x);
         std::cout << "Индексы: ";
         for(int i=1; i<=r[0]; ++i) std::cout << r[i] << " ";
