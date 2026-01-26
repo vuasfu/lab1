@@ -1,223 +1,128 @@
-#include "functions.h"
-
 #include <iostream>
 #include <locale>
 #include <string>
+#include <limits>
+#include "functions.h"
 
-using std::cin;
-using std::cout;
-using std::endl;
-using std::string;
-using std::to_string;
+// Очистка потока ввода для предотвращения зацикливания и вылета меню
+void CleanStdin() {
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
-// Отображает главное меню программы.
-void ShowMenu() {
-  cout << "\nМЕНЮ ПРОГРАММЫ" << endl;
-  cout << "1.  Вычислить дробную часть числа" << endl;
-  cout << "2.  Преобразовать символ цифры в ASCII код" << endl;
-  cout << "3.  Проверить, является ли число двузначным" << endl;
-  cout << "4.  Проверить, находится ли число в диапазоне" << endl;
-  cout << "5.  Проверить равенство трёх чисел" << endl;
-  cout << "6.  Вычислить модуль числа" << endl;
-  cout << "7.  Проверить делимость на 3 или 5 (но не на 15)" << endl;
-  cout << "8.  Найти максимум из трёх чисел" << endl;
-  cout << "9.  Вычислить сумму с особым условием" << endl;
-  cout << "10. Преобразовать номер дня недели в название" << endl;
-  cout << "11. Вывести последовательность чисел от 0 до N" << endl;
-  cout << "12. Вывести чётные числа от 0 до N" << endl;
-  cout << "13. Подсчитать количество цифр в числе" << endl;
-  cout << "14. Нарисовать квадрат из звёздочек" << endl;
-  cout << "15. Нарисовать прямоугольный треугольник" << endl;
-  cout << "16-17. Работа с массивами (поиск и максимальный модуль)" << endl;
-  cout << "0.  Выход" << endl;
+int SafeIntInput(const std::string& msg) {
+  int val;
+  while (true) {
+    std::cout << msg;
+    if (std::cin >> val) return val;
+    std::cout << "Ошибка: введите целое число!" << std::endl;
+    CleanStdin();
+  }
 }
 
 int main() {
-  SetUtf8Console();
-  
+  try {
+    std::locale::global(std::locale(""));
+    std::cout.imbue(std::locale());
+  } catch (...) {}
+
+  std::cout << std::boolalpha; // Настройка вывода true/false
+
   int choice;
-  
   do {
-    ShowMenu();
-    choice = GetIntegerInput("Выберите задачу (0-17): ");
-    
+    std::cout << "\n--- МЕНЮ ЗАДАНИЙ ---" << std::endl;
+    std::cout << "1.  [1.1] Дробная часть: выделяет 0.xx из числа x" << std::endl;
+    std::cout << "2.  [1.3] Символ в число: превращает char '5' в int 5" << std::endl;
+    std::cout << "3.  [1.5] Двузначное: проверка, лежит ли число в [-99, -10] или [10, 99]" << std::endl;
+    std::cout << "4.  [1.7] Диапазон: входит ли число n в интервал между a и b" << std::endl;
+    std::cout << "5.  [1.9] Равенство: проверка, что все три числа одинаковы" << std::endl;
+    std::cout << "6.  [2.1] Модуль: возвращает абсолютное значение числа" << std::endl;
+    std::cout << "7.  [2.3] Is35: делится на 3 или 5, но не на 15" << std::endl;
+    std::cout << "8.  [2.5] Максимум: находит наибольшее из трех чисел" << std::endl;
+    std::cout << "9.  [2.7] Сумма 20: если сумма в [10, 19], результат равен 20" << std::endl;
+    std::cout << "10. [2.9] День недели: выводит название по номеру 1-7" << std::endl;
+    std::cout << "11. [3.1] Список: выводит все числа от 0 до N" << std::endl;
+    std::cout << "12. [3.3] Четные: выводит четные от 0 до N без использования if" << std::endl;
+    std::cout << "13. [3.5] Цифры: считает количество знаков в длинном числе" << std::endl;
+    std::cout << "14. [3.7] Квадрат: рисует заполненную фигуру из звездочек" << std::endl;
+    std::cout << "15. [3.9] Треугольник: рисует прямоугольный треугольник (правый угол)" << std::endl;
+    std::cout << "16. [4.1] Поиск: возвращает индекс первого вхождения числа в массив" << std::endl;
+    std::cout << "17. [4.3] Макс-Модуль: ищет элемент с наибольшим абсолютным значением" << std::endl;
+    std::cout << "18. [4.5] Вставка: вставляет один массив в другой по индексу" << std::endl;
+    std::cout << "19. [4.7] Реверс: создает новый массив-копию, перевернутый задом наперед" << std::endl;
+    std::cout << "20. [4.9] Все вхождения: ищет все индексы числа в массиве" << std::endl;
+    std::cout << "0.  Выход" << std::endl;
+
+    choice = SafeIntInput("Выберите пункт: ");
+
     switch (choice) {
       case 1: {
-        cout << "\nВычисление дробной части числа" << endl;
-        double num = GetDoubleInput("Введите число: ");
-        double result = Fraction(num);
-        cout << "Дробная часть числа: " << result << endl;
+        double d;
+        std::cout << "Введите число: ";
+        if (!(std::cin >> d)) CleanStdin();
+        else std::cout << "Результат: " << Fraction(d) << std::endl;
         break;
       }
-      
       case 2: {
-        cout << "\nПреобразование символа цифры в ASCII код" << endl;
-        char ch = GetCharInput("Введите символ цифры (0-9): ");
-        if (ch >= '0' && ch <= '9') {
-          int result = CharToNum(ch);
-          cout << "ASCII код символа '" << ch << "': " << result << endl;
-        } else {
-          cout << "Ошибка: введён не цифровой символ!" << endl;
-        }
+        char c;
+        std::cout << "Введите символ цифры: ";
+        std::cin >> c;
+        int res = CharToNum(c);
+        if (res != -1) std::cout << "Результат: " << res << std::endl;
+        else std::cout << "Ошибка: это не цифра!" << std::endl;
+        CleanStdin(); // Очистка после ввода char, чтобы не сломать меню
         break;
       }
-      
-      case 3: {
-        cout << "\nПроверка, является ли число двузначным" << endl;
-        int num = GetIntegerInput("Введите число: ");
-        bool result = IsTwoDigits(num);
-        cout << "Число " << num << (result ? " является" : " не является")
-             << " двузначным" << endl;
+      case 3:
+        std::cout << "Результат: " << IsTwoDigits(SafeIntInput("Число: ")) << std::endl;
         break;
-      }
-      
       case 4: {
-        cout << "\nПроверка, находится ли число в диапазоне" << endl;
-        int a = GetIntegerInput("Введите начало диапазона (a): ");
-        int b = GetIntegerInput("Введите конец диапазона (b): ");
-        int num = GetIntegerInput("Введите число для проверки: ");
-        bool result = IsInRange(a, b, num);
-        int min_val = (a < b) ? a : b;
-        int max_val = (a > b) ? a : b;
-        cout << "Число " << num << (result ? " находится" : " не находится")
-             << " в диапазоне [" << min_val << ", " << max_val << "]" << endl;
+        int a = SafeIntInput("a: "), b = SafeIntInput("b: "), n = SafeIntInput("n: ");
+        std::cout << "Результат: " << IsInRange(a, b, n) << std::endl;
         break;
       }
-      
       case 5: {
-        cout << "\nПроверка равенства трёх чисел" << endl;
-        int a = GetIntegerInput("Введите число a: ");
-        int b = GetIntegerInput("Введите число b: ");
-        int c = GetIntegerInput("Введите число c: ");
-        bool result = AreEqual(a, b, c);
-        cout << "Числа " << a << ", " << b << ", " << c
-             << (result ? " равны" : " не равны") << " между собой" << endl;
+        int a = SafeIntInput("1: "), b = SafeIntInput("2: "), c = SafeIntInput("3: ");
+        std::cout << "Результат: " << AreEqual(a, b, c) << std::endl;
         break;
       }
-      
-      case 6: {
-        cout << "\nВычисление модуля числа" << endl;
-        int num = GetIntegerInput("Введите число: ");
-        int result = MyAbs(num);
-        cout << "|" << num << "| = " << result << endl;
+      case 7:
+        std::cout << "Результат: " << Is35(SafeIntInput("Число: ")) << std::endl;
+        break;
+      case 10:
+        std::cout << DayOfWeek(SafeIntInput("Номер дня: ")) << std::endl;
+        break;
+      case 14:
+        DrawSquare(SafeIntInput("Сторона: "));
+        break;
+      case 18: {
+        int s1 = SafeIntInput("Размер 1: ");
+        int* a1 = new int[s1];
+        for(int i=0; i<s1; ++i) a1[i] = SafeIntInput("Эл: ");
+        int s2 = SafeIntInput("Размер 2: ");
+        int* a2 = new int[s2];
+        for(int i=0; i<s2; ++i) a2[i] = SafeIntInput("Эл: ");
+        int p = SafeIntInput("Поз: ");
+        int* r = InsertArray(a1, s1, a2, s2, p);
+        for(int i=0; i<(s1+s2); ++i) std::cout << r[i] << " ";
+        delete[] a1; delete[] a2; delete[] r;
         break;
       }
-      
-      case 7: {
-        cout << "\nПроверка делимости на 3 или 5 (но не на оба одновременно)" << endl;
-        int num = GetIntegerInput("Введите число: ");
-        bool result = IsDivisibleBy3Or5ButNot15(num);
-        cout << "Результат: " << (result ? "true" : "false") << endl;
+      case 20: {
+        int s = SafeIntInput("Размер: ");
+        int* a = new int[s];
+        for(int i=0; i<s; ++i) a[i] = SafeIntInput("Эл: ");
+        int x = SafeIntInput("Ищем: ");
+        int* r = FindAll(a, s, x);
+        std::cout << "Индексы: ";
+        for(int i=1; i<=r[0]; ++i) std::cout << r[i] << " ";
+        delete[] a; delete[] r;
         break;
       }
-      
-      case 8: {
-        cout << "\nНахождение максимума из трёх чисел" << endl;
-        int x = GetIntegerInput("Введите число x: ");
-        int y = GetIntegerInput("Введите число y: ");
-        int z = GetIntegerInput("Введите число z: ");
-        int result = MaxOfThree(x, y, z);
-        cout << "Максимум из чисел " << x << ", " << y << ", " << z
-             << " равен " << result << endl;
-        break;
-      }
-      
-      case 9: {
-        cout << "\nВычисление суммы с особым условием" << endl;
-        int x = GetIntegerInput("Введите число x: ");
-        int y = GetIntegerInput("Введите число y: ");
-        int result = SpecialSum(x, y);
-        cout << "Результат суммы " << x << " + " << y << " = " << result << endl;
-        break;
-      }
-      
-      case 10: {
-        cout << "\nПреобразование номера дня недели в название" << endl;
-        int day_num = GetIntegerInput("Введите номер дня недели (1-7): ");
-        string result = DayOfWeek(day_num);
-        cout << "День недели: " << result << endl;
-        break;
-      }
-      
-      case 11: {
-        cout << "\nВывод последовательности чисел от 0 до N" << endl;
-        int n = GetIntegerInput("Введите число N: ");
-        if (n < 0) {
-          cout << "Число должно быть неотрицательным!" << endl;
-        } else {
-          string result = ListNumbers(n);
-          cout << "Последовательность: " << result << endl;
-        }
-        break;
-      }
-      
-      case 12: {
-        cout << "\nВывод чётных чисел от 0 до N" << endl;
-        int n = GetIntegerInput("Введите число N: ");
-        if (n < 0) {
-          cout << "Число должно быть неотрицательным!" << endl;
-        } else {
-          string result = EvenNumbers(n);
-          cout << "Чётные числа: " << result << endl;
-        }
-        break;
-      }
-      
-      case 13: {
-        cout << "\nПодсчёт количества цифр в числе" << endl;
-        long num = GetIntegerInput("Введите число: ");
-        int result = DigitCount(num);
-        cout << "Количество цифр в числе " << num << ": " << result << endl;
-        break;
-      }
-      
-      case 14: {
-        cout << "\nРисование квадрата из звёздочек" << endl;
-        int size = GetIntegerInput("Введите размер квадрата: ");
-        if (size <= 0) {
-          cout << "Размер должен быть положительным!" << endl;
-        } else {
-          cout << "\nКвадрат размером " << size << "x" << size << ":\n" << endl;
-          DrawSquare(size);
-        }
-        break;
-      }
-      
-      case 15: {
-        cout << "\nРисование прямоугольного треугольника" << endl;
-        int height = GetIntegerInput("Введите высоту треугольника: ");
-        if (height <= 0) {
-          cout << "Высота должна быть положительной!" << endl;
-        } else {
-          cout << "\nТреугольник высотой " << height << ":\n" << endl;
-          DrawRightTriangle(height);
-        }
-        break;
-      }
-      
-      case 16:
-      case 17: {
-        ProcessArrayOperations();
-        break;
-      }
-      
-      case 0: {
-        cout << "Выход из программы..." << endl;
-        break;
-      }
-      
-      default: {
-        cout << "Неверный выбор! Пожалуйста, выберите от 0 до 17." << endl;
-        break;
-      }
+      case 0: std::cout << "Выход..." << std::endl; break;
+      default: std::cout << "Нет такого пункта!" << std::endl; break;
     }
-    
-    if (choice != 0) {
-      cout << "\nНажмите Enter для продолжения...";
-      cin.get();
-    }
-    
   } while (choice != 0);
-  
+
   return 0;
 }
